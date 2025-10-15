@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Matters</title>
+  <style>
+  	@media (max-width: 600px) {
+	.login-box {
+		width: 80%;
+		padding: 30px 25px;
+		}
+
+	.login-box h1 {
+		font-size: 22px;
+		}
+
+	.login-box input, .login-box button {
+		font-size: 14px;
+		}
+	}
+	
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Raleway', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .background {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    .bg-section {
+      flex: 1;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .bg1 {
+      background-image: url('https://cdn.discordapp.com/attachments/1423543183174012995/1427855256456396830/bg3.webp?ex=68f06155&is=68ef0fd5&hm=79416cf2d5385381df60622584a6e4648fb2e9e57abdb22cd1d7e137e38cb347&'); 
+    }
+
+    .bg2 {
+      background-image: url('https://cdn.discordapp.com/attachments/1423543183174012995/1427855256804655135/bg2.webp?ex=68f06155&is=68ef0fd5&hm=3ec86876e7abea2cc94bea0ce5e6dcdc4c2da5901dc397651d462346d020933d&'); 
+    }
+
+    .bg3 {
+      background-image: url('https://cdn.discordapp.com/attachments/1423543183174012995/1427855257165369445/bg1.webp?ex=68f06155&is=68ef0fd5&hm=d09dcb14a02334c16580295ca444ba1471868bb9e192f0f15d5da16510d0b813&'); 
+    }
+
+    .overlay {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(70, 70, 70, 0.6);
+      z-index: 1;
+    }
+
+    .login-box {
+      position: absolute;
+      z-index: 2;
+      background: white;
+      padding: 40px 50px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 320px;
+    }
+
+    .login-box h1 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 25px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 15px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-box button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="background">
+    <div class="bg-section bg1"></div>
+    <div class="bg-section bg2"></div>
+    <div class="bg-section bg3"></div>
+  </div>
+
+  <div class="overlay"></div>
+
+  <div class="login-box">
+    <h1>Space Matters</h1>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Enter username" required>
+      <input type="text" id="code" placeholder="Enter code" required>
+      <button type="submit">Connect</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const code = document.getElementById('code').value.trim();
+      localStorage.setItem('accessCode', code);
+      window.location.href = 'loading.html';
+    });
+  </script>
+</body>
+</html>
