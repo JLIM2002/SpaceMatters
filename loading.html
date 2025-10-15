@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading...</title>
+  <style>
+	@media (max-width: 600px) {
+		img {
+		width: 150px;
+		}
+	}
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Raleway', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .background {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    .bg-section {
+      flex: 1;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .bg1 {
+      background-image: url('https://cdn.discordapp.com/attachments/1423543183174012995/1427855256456396830/bg3.webp?ex=68f06155&is=68ef0fd5&hm=79416cf2d5385381df60622584a6e4648fb2e9e57abdb22cd1d7e137e38cb347&'); 
+    }
+
+    .bg2 {
+      background-image: url('https://cdn.discordapp.com/attachments/1423543183174012995/1427855256804655135/bg2.webp?ex=68f06155&is=68ef0fd5&hm=3ec86876e7abea2cc94bea0ce5e6dcdc4c2da5901dc397651d462346d020933d&'); 
+    }
+
+    .bg3 {
+      background-image: url('https://cdn.discordapp.com/attachments/1423543183174012995/1427855257165369445/bg1.webp?ex=68f06155&is=68ef0fd5&hm=d09dcb14a02334c16580295ca444ba1471868bb9e192f0f15d5da16510d0b813&'); 
+    }
+
+    .overlay {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(70, 70, 70, 0.6);
+      z-index: 1;
+    }
+
+    .logo-container {
+      position: absolute;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 130px;
+      margin-bottom: 25px;
+    }
+
+    .progress-bar {
+      width: 180px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #28a745;
+      transition: width 2s linear;
+    }
+  </style>
+</head>
+<body>
+  <div class="background">
+    <div class="bg-section bg1"></div>
+    <div class="bg-section bg2"></div>
+    <div class="bg-section bg3"></div>
+  </div>
+
+  <div class="overlay"></div>
+
+  <div class="logo-container">
+    <img src="https://cdn.discordapp.com/attachments/1423543183174012995/1427859193792168109/logo.webp?ex=68f06500&is=68ef1380&hm=30fff517af69f8d44182bc9ccfd26ccc6c31a9ef93e8d564e1afe33eff514738" alt="Logo" class="logo">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <script>
+    const validCodes = ['1234', 'abcd', 'space2025']; // replace with real access codes
+    const progress = document.getElementById('progressFill');
+    const code = localStorage.getItem('accessCode');
+
+    setTimeout(() => { progress.style.width = '100%'; }, 100);
+
+    setTimeout(() => {
+      if (validCodes.includes(code)) {
+        window.location.href = 'home.html';
+      } else {
+        window.location.href = 'index.html';
+      }
+    }, 2300);
+  </script>
+</body>
+</html>
