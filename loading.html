@@ -104,36 +104,21 @@
     </div>
   </div>
 
-	
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  // Simulate loading (or check code validation)
-  setTimeout(() => {
-    // ✅ Get current folder path safely
-    const basePath = window.location.pathname.replace(/\/[^/]*$/, "/");
-    // Redirect safely to home.html
-    window.location.replace(basePath + "home.html");
-  }, 2000); // adjust delay to your loading animation
-});
-</script>
-
-
-<!--
   <script>
     const validCodes = ['1234', 'abcd', 'space2025']; // replace with real access codes
     const progress = document.getElementById('progressFill');
     const code = localStorage.getItem('accessCode');
+	const basePath = window.location.pathname.replace(/\/[^/]*$/, "/");
 
     setTimeout(() => { progress.style.width = '100%'; }, 100);
 
     setTimeout(() => {
       if (validCodes.includes(code)) {
-        window.location.href = './home.html';
+        window.location.replace(basePath + "home.html");
       } else {
         window.location.href = 'index.html';
       }
     }, 3000);
   </script>
-	-->
 </body>
 </html>
