@@ -5,21 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Space Matters</title>
   <style>
-  	@media (max-width: 600px) {
-	.login-box {
-		width: 80%;
-		padding: 30px 25px;
-		}
-
-	.login-box h1 {
-		font-size: 22px;
-		}
-
-	.login-box input, .login-box button {
-		font-size: 14px;
-		}
-	}
-	
     * {
       margin: 0;
       padding: 0;
@@ -46,18 +31,34 @@
       flex: 1;
       background-size: cover;
       background-position: center;
+      transition: all 0.3s ease;
     }
 
     .bg1 {
-      background-image: url('https://cdn.discordapp.com/attachments/1423543183174012995/1427855256456396830/bg3.webp?ex=68f06155&is=68ef0fd5&hm=79416cf2d5385381df60622584a6e4648fb2e9e57abdb22cd1d7e137e38cb347&'); 
+      background-image: url('images/test1');
     }
 
     .bg2 {
-      background-image: url('https://cdn.discordapp.com/attachments/1423543183174012995/1427855256804655135/bg2.webp?ex=68f06155&is=68ef0fd5&hm=3ec86876e7abea2cc94bea0ce5e6dcdc4c2da5901dc397651d462346d020933d&'); 
+      background-image: url('images/test2');
     }
 
     .bg3 {
-      background-image: url('https://cdn.discordapp.com/attachments/1423543183174012995/1427855257165369445/bg1.webp?ex=68f06155&is=68ef0fd5&hm=d09dcb14a02334c16580295ca444ba1471868bb9e192f0f15d5da16510d0b813&'); 
+      background-image: url('images/test3');
+    }
+
+    /* 🟩 Mobile view: only show the middle image */
+    @media (max-width: 768px) {
+      .background {
+        display: block;
+      }
+      .bg-section {
+        display: none;
+      }
+      .bg2 {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
     }
 
     .overlay {
@@ -123,20 +124,11 @@
 
   <div class="login-box">
     <h1>Space Matters</h1>
-    <form id="loginForm">
-      <input type="text" id="username" placeholder="Enter username" required>
-      <input type="text" id="code" placeholder="Enter code" required>
+    <form action="loading.html" method="GET">
+      <input type="text" placeholder="Enter username" required>
+      <input type="text" placeholder="Enter code" required>
       <button type="submit">Connect</button>
     </form>
   </div>
-
-  <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const code = document.getElementById('code').value.trim();
-      localStorage.setItem('accessCode', code);
-      window.location.href = 'loading.html';
-    });
-  </script>
 </body>
 </html>
