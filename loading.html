@@ -104,21 +104,30 @@
     </div>
   </div>
 
-  <script>
-    const validCodes = ['1234', 'abcd', 'space2025']; // replace with real access codes
-    const progress = document.getElementById('progressFill');
-    const code = localStorage.getItem('accessCode');
-	const basePath = window.location.pathname.replace(/\/[^/]*$/, "/");
+<script>
+document.querySelector("form").addEventListener("submit", function(e) {
+  e.preventDefault();
 
-    setTimeout(() => { progress.style.width = '100%'; }, 100);
+  const username = document.querySelector("input[placeholder='Enter username']").value.trim();
+  const code = document.querySelector("input[placeholder='Enter code']").value.trim().toUpperCase();
 
-    setTimeout(() => {
-      if (validCodes.includes(code)) {
-        window.location.replace(basePath + "home.html");
-      } else {
-        window.location.href = 'index.html';
-      }
-    }, 3000);
-  </script>
+  // ✅ Example valid codes (for testing)
+  const validCodes = ["ABC123", "TESTCODE", "WIN2025"];
+
+  // Clean inputs and check properly
+  if (validCodes.includes(code)) {
+    // ✅ Save username or token (optional)
+    localStorage.setItem("user", username);
+
+    // ✅ Redirect to loading screen
+    window.location.href = "loading.html";
+  } else {
+    alert("Invalid code. Please try again.");
+    // You can also clear the field:
+    document.querySelector("input[placeholder='Enter code']").value = "";
+  }
+});
+</script>
+
 </body>
 </html>
