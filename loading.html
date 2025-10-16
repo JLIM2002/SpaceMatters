@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Wait for loading bar or animation to finish before redirect
         setTimeout(() => {
           // Use full path-safe redirect for GitHub Pages
-          window.location.replace(window.location.origin + window.location.pathname.replace("index.html", "") + "home.html");
+          window.location.replace(window.location.origin + window.location.pathname.replace("index.html", "loading.html", "") + "home.html");
         }, 1000);
       }
     };
