@@ -108,24 +108,5 @@
     </form>
   </div>
 
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const username = document.querySelector("input[placeholder='Enter username']").value.trim();
-      const code = document.querySelector("input[placeholder='Enter code']").value.trim().toUpperCase();
-
-      const validCodes = ["SPACE2025", "TEST123", "ACCESSOK"];
-
-      console.log("Submitted code:", JSON.stringify(code)); // for debugging
-
-      if (validCodes.includes(code)) {
-        localStorage.setItem("user", username);
-        window.location.href = "loading.html"; // ✅ clean redirect
-      } else {
-        alert("Invalid code. Please try again.");
-      }
-    });
-  </script>
 </body>
 </html>
