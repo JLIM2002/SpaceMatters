@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Space Matters</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Raleway', sans-serif;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Raleway', sans-serif; }
 
     body {
       height: 100vh;
@@ -21,53 +16,29 @@
       position: relative;
     }
 
-.background {
-  display: flex;
-  width: 100%;
-  height: 100vh; /* ensures it fills the whole screen */
-}
+    .background {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
 
-.bg-section {
-  flex: 1;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  transition: all 0.3s ease;
-}
+    .bg-section {
+      flex: 1;
+      background-size: cover;
+      background-position: center;
+      transition: all 0.3s ease;
+    }
 
-/* 🖼 Correct image paths + file extensions */
-.bg1 {
-  background-image: url('images/test1.webp');
-}
+    .bg1 { background-image: url('images/test1.webp'); }
+    .bg2 { background-image: url('images/test2.webp'); }
+    .bg3 { background-image: url('images/test3.webp'); }
 
-.bg2 {
-  background-image: url('images/test2.webp');
-}
-
-.bg3 {
-  background-image: url('images/test3.webp');
-}
-
-/* 🟩 Mobile view: only show the middle image */
-@media (max-width: 768px) {
-  .background {
-    display: block;
-    width: 100%;
-    height: 100vh;
-  }
-
-  .bg-section {
-    display: none;
-  }
-
-  .bg2 {
-    display: block;
-    width: 100%;
-    height: 100vh;
-    background-size: cover;
-    background-position: center;
-  }
-}
+    /* 🟩 Mobile view: only show one background image */
+    @media (max-width: 768px) {
+      .background { display: block; }
+      .bg-section { display: none; }
+      .bg2 { display: block; width: 100%; height: 100%; }
+    }
 
     .overlay {
       position: absolute;
@@ -116,9 +87,7 @@
       transition: 0.3s;
     }
 
-    .login-box button:hover {
-      background: #0056b3;
-    }
+    .login-box button:hover { background: #0056b3; }
   </style>
 </head>
 <body>
@@ -132,11 +101,31 @@
 
   <div class="login-box">
     <h1>Space Matters</h1>
-    <form action="loading.html" method="GET">
+    <form id="loginForm">
       <input type="text" placeholder="Enter username" required>
       <input type="text" placeholder="Enter code" required>
       <button type="submit">Connect</button>
     </form>
   </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const username = document.querySelector("input[placeholder='Enter username']").value.trim();
+      const code = document.querySelector("input[placeholder='Enter code']").value.trim().toUpperCase();
+
+      const validCodes = ["SPACE2025", "TEST123", "ACCESSOK"];
+
+      console.log("Submitted code:", JSON.stringify(code)); // for debugging
+
+      if (validCodes.includes(code)) {
+        localStorage.setItem("user", username);
+        window.location.href = "loading.html"; // ✅ clean redirect
+      } else {
+        alert("Invalid code. Please try again.");
+      }
+    });
+  </script>
 </body>
 </html>
