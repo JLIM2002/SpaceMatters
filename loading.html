@@ -104,6 +104,31 @@
     </div>
   </div>
 
+	
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // simulate loading animation
+  const images = ["images/test1.webp", "images/test2.webp", "images/test3.webp"];
+  let loaded = 0;
+
+  images.forEach(src => {
+    const img = new Image();
+    img.src = src;
+    img.onload = () => {
+      loaded++;
+      if (loaded === images.length) {
+        // Wait for loading bar or animation to finish before redirect
+        setTimeout(() => {
+          // Use full path-safe redirect for GitHub Pages
+          window.location.replace(window.location.origin + window.location.pathname.replace("index.html", "") + "home.html");
+        }, 1000);
+      }
+    };
+  });
+});
+</script>
+
+<!--
   <script>
     const validCodes = ['1234', 'abcd', 'space2025']; // replace with real access codes
     const progress = document.getElementById('progressFill');
@@ -119,5 +144,6 @@
       }
     }, 3000);
   </script>
+	-->
 </body>
 </html>
