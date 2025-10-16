@@ -107,26 +107,16 @@
 	
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  // simulate loading animation
-  const images = ["images/test1.webp", "images/test2.webp", "images/test3.webp"];
-  let loaded = 0;
-
-  images.forEach(src => {
-    const img = new Image();
-    img.src = src;
-    img.onload = () => {
-      loaded++;
-      if (loaded === images.length) {
-        // Wait for loading bar or animation to finish before redirect
-        setTimeout(() => {
-          // Use full path-safe redirect for GitHub Pages
-          window.location.replace(window.location.origin + window.location.pathname.replace("index.html", "loading.html", "") + "home.html");
-        }, 1000);
-      }
-    };
-  });
+  // Simulate loading (or check code validation)
+  setTimeout(() => {
+    // ✅ Get current folder path safely
+    const basePath = window.location.pathname.replace(/\/[^/]*$/, "/");
+    // Redirect safely to home.html
+    window.location.replace(basePath + "home.html");
+  }, 2000); // adjust delay to your loading animation
 });
 </script>
+
 
 <!--
   <script>
