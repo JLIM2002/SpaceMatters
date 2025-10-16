@@ -48,25 +48,41 @@
     <div class="fill" id="fill"></div>
   </div>
 
-  <script>
-    const validCodes = ["1234", "spacematters", "access2025"];
+<script>
+  // 🔗 Replace this with your own Google Apps Script web app URL
+  const apiURL = "https://script.google.com/macros/s/AKfycbyzm20QcoPrLIo4ES106myDvMXuaIR9v3zTTFXXk0798scgTdo33w3LhAh5Ywu0tOuZ/exec";
 
-    window.onload = function() {
-      const fill = document.getElementById("fill");
-      fill.style.width = "100%"; // animate fill bar
+  window.onload = function() {
+    const fill = document.getElementById("fill");
+    fill.style.width = "100%"; // start fill animation
 
-      const nickname = localStorage.getItem("nickname");
-      const code = localStorage.getItem("accessCode");
+    const nickname = localStorage.getItem("nickname");
+    const code = localStorage.getItem("accessCode");
 
-      // after animation finishes (~2 seconds)
-      setTimeout(() => {
-        if (validCodes.includes(code)) {
-          window.location.href = "home.html";
-        } else {
+    // Wait for animation (~2 seconds)
+    setTimeout(() => {
+      if (!code) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      // ✅ Call the Google Sheet API to verify code
+      fetch(`${apiURL}?code=${encodeURIComponent(code)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.valid) {
+            window.location.href = "home.html";
+          } else {
+            window.location.href = "index.html";
+          }
+        })
+        .catch(err => {
+          console.error("Error verifying code:", err);
           window.location.href = "index.html";
-        }
-      }, 2000);
-    };
-  </script>
+        });
+    }, 2000);
+  };
+</script>
+
 </body>
 </html>
