@@ -21,45 +21,53 @@
       position: relative;
     }
 
-    .background {
-      display: flex;
-      width: 100%;
-      height: 100%;
-    }
+.background {
+  display: flex;
+  width: 100%;
+  height: 100vh; /* ensures it fills the whole screen */
+}
 
-    .bg-section {
-      flex: 1;
-      background-size: cover;
-      background-position: center;
-      transition: all 0.3s ease;
-    }
+.bg-section {
+  flex: 1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: all 0.3s ease;
+}
 
-    .bg1 {
-      background-image: url('images/test1');
-    }
+/* 🖼 Correct image paths + file extensions */
+.bg1 {
+  background-image: url('images/test1.webp');
+}
 
-    .bg2 {
-      background-image: url('images/test2');
-    }
+.bg2 {
+  background-image: url('images/test2.webp');
+}
 
-    .bg3 {
-      background-image: url('images/test3');
-    }
+.bg3 {
+  background-image: url('images/test3.webp');
+}
 
-    /* 🟩 Mobile view: only show the middle image */
-    @media (max-width: 768px) {
-      .background {
-        display: block;
-      }
-      .bg-section {
-        display: none;
-      }
-      .bg2 {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-    }
+/* 🟩 Mobile view: only show the middle image */
+@media (max-width: 768px) {
+  .background {
+    display: block;
+    width: 100%;
+    height: 100vh;
+  }
+
+  .bg-section {
+    display: none;
+  }
+
+  .bg2 {
+    display: block;
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+  }
+}
 
     .overlay {
       position: absolute;
