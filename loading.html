@@ -50,36 +50,36 @@
 
 <script>
   // 🔗 Replace this with your own Google Apps Script web app URL
-  const apiURL = "https://script.google.com/macros/s/AKfycbyzm20QcoPrLIo4ES106myDvMXuaIR9v3zTTFXXk0798scgTdo33w3LhAh5Ywu0tOuZ/exec";
+  const apiURL = "https://script.google.com/macros/s/AKfycbx6ZXpGhyrlXsEeWuFUwLrYyNOWGNW_7P4cENDsbwRt8-7u2YkxwqQySIfUoJRqatsV/exec";
 
   window.onload = function() {
     const fill = document.getElementById("fill");
-    fill.style.width = "100%"; // start fill animation
+    fill.style.width = "100%"; // animate loading bar
 
     const nickname = localStorage.getItem("nickname");
     const code = localStorage.getItem("accessCode");
 
-    // Wait for animation (~2 seconds)
-    setTimeout(() => {
+    setTimeout(async () => {
       if (!code) {
         window.location.href = "index.html";
         return;
       }
 
-      // ✅ Call the Google Sheet API to verify code
-      fetch(`${apiURL}?code=${encodeURIComponent(code)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.valid) {
-            window.location.href = "home.html";
-          } else {
-            window.location.href = "index.html";
-          }
-        })
-        .catch(err => {
-          console.error("Error verifying code:", err);
+      try {
+        const response = await fetch(`${webAppUrl}?code=${encodeURIComponent(code)}`);
+        const data = await response.json();
+
+        if (data.valid) {
+          window.location.href = "home.html";
+        } else {
+          alert("Invalid or expired code.");
           window.location.href = "index.html";
-        });
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Connection error. Please try again later.");
+        window.location.href = "index.html";
+      }
     }, 2000);
   };
 </script>
