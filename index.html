@@ -128,42 +128,57 @@
     <button onclick="goToLoading()">Connect</button>
   </div>
 
-  <script>
-    function goToLoading() {
-      const nickname = document.getElementById("nickname").value.trim();
-      const code = document.getElementById("accessCode").value.trim();
+<script>
+function goToLoading() {
+  const nickname = document.getElementById("nickname").value.trim();
+  const code = document.getElementById("accessCode").value.trim();
 
-      if (nickname && code) {
-        // store user input for loading.html to verify later
-        localStorage.setItem("nickname", nickname);
-        localStorage.setItem("accessCode", code);
+  if (nickname && code) {
+    // store user input for loading.html to verify later
+    localStorage.setItem("nickname", nickname);
+    localStorage.setItem("accessCode", code);
 
-        // redirect to loading.html
-        window.location.href = "loading.html";
-      } else {
-        alert("Please enter both username and code.");
-      }
+    // store Omada parameters to pass to next pages
+    const params = new URLSearchParams(window.location.search);
+    const portalUrl = params.get("portalUrl");
+    const clientMac = params.get("clientMac");
+    const wlanuserip = params.get("wlanuserip");
+
+    if (portalUrl && clientMac && wlanuserip) {
+      localStorage.setItem("portalUrl", portalUrl);
+      localStorage.setItem("clientMac", clientMac);
+      localStorage.setItem("wlanuserip", wlanuserip);
     }
 
-    // Allow Enter key to submit
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        goToLoading();
-      }
-    });
+    // redirect to loading.html
+    window.location.href = "loading.html";
+  } else {
+    alert("Please enter both username and code.");
+  }
+}
 
-  // Disable right click
-  document.addEventListener('contextmenu', event => event.preventDefault());
+// Allow Enter key to submit
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    goToLoading();
+  }
+});
 
-  // Disable F12, Ctrl+Shift+I, Ctrl+U
-  document.onkeydown = function(e) {
-    if (e.key === "F12" || 
-        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
-        (e.ctrlKey && e.key === "U")) {
-      e.preventDefault();
-      return false;
-    }
-  };
-  </script>
+// Disable right click
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// Disable F12, Ctrl+Shift+I, Ctrl+U
+document.onkeydown = function(e) {
+  if (
+    e.key === "F12" || 
+    (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+    (e.ctrlKey && e.key === "U")
+  ) {
+    e.preventDefault();
+    return false;
+  }
+};
+</script>
+
 </body>
 </html>
