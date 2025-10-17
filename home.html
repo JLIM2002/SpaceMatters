@@ -104,19 +104,43 @@
   <h2>Follow us to get updated!</h2>
   
 <script>
-    // Disable right click
-  document.addEventListener('contextmenu', event => event.preventDefault());
+// Disable right click
+document.addEventListener('contextmenu', event => event.preventDefault());
 
-  // Disable F12, Ctrl+Shift+I, Ctrl+U
-  document.onkeydown = function(e) {
-    if (e.key === "F12" || 
-        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
-        (e.ctrlKey && e.key === "U")) {
-      e.preventDefault();
-      return false;
+// Disable F12, Ctrl+Shift+I, Ctrl+U
+document.onkeydown = function(e) {
+  if (
+    e.key === "F12" ||
+    (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+    (e.ctrlKey && e.key === "U")
+  ) {
+    e.preventDefault();
+    return false;
+  }
+};
+
+// --- Network access grant (Omada-compatible) ---
+window.addEventListener("load", async () => {
+  const portalUrl = localStorage.getItem("portalUrl");
+  const clientMac = localStorage.getItem("clientMac");
+  const wlanuserip = localStorage.getItem("wlanuserip");
+
+  // Only proceed if portal params exist
+  if (portalUrl && clientMac && wlanuserip) {
+    try {
+      // Construct redirect URL
+      const grantUrl = `${portalUrl}?clientMac=${clientMac}&wlanuserip=${wlanuserip}&success=true`;
+
+      // Redirect to Omada gateway to grant access
+      window.location.href = grantUrl;
+    } catch (err) {
+      console.error("Grant failed:", err);
     }
-  };
-  
+  } else {
+    console.warn("No portal parameters found — possibly accessed directly.");
+  }
+});
 </script>
+
 </body>
 </html>
