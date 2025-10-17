@@ -49,68 +49,66 @@
   </div>
 
 <script>
-  // 🔗 Replace this with your own Google Apps Script web app URL
+  // 🔗 Your Google Apps Script web app
   const apiURL = "https://script.google.com/macros/s/AKfycbx6ZXpGhyrlXsEeWuFUwLrYyNOWGNW_7P4cENDsbwRt8-7u2YkxwqQySIfUoJRqatsV/exec";
 
-  window.onload = function() {
+  window.onload = async function() {
     const fill = document.getElementById("fill");
-    fill.style.width = "100%"; // animate loading bar
+    fill.style.width = "100%";
 
     const nickname = localStorage.getItem("nickname");
     const code = localStorage.getItem("accessCode");
 
-    setTimeout(async () => {
-      if (!code) {
-        window.location.href = "index.html";
-        return;
-      }
+    if (!code) {
+      window.location.href = "index.html";
+      return;
+    }
 
-      try {
-        const response = await fetch(`${apiURL}?code=${encodeURIComponent(code)}`);
-        const data = await response.json();
+    // Detect Omada controller IP automatically from the current URL
+    const currentHost = window.location.hostname;
+    let controllerIP;
 
-        if (data.valid) {
-          // ✅ Get Omada parameters from URL
-          const params = new URLSearchParams(window.location.search);
-          const clientMac = params.get("clientMac");
-          const wlanuserip = params.get("wlanuserip");
+    if (currentHost.startsWith("192.") || currentHost.startsWith("10.") || currentHost === "1.1.1.3") {
+      controllerIP = currentHost; // Use the local IP or 1.1.1.3 redirect
+    } else {
+      controllerIP = "192.168.254.198"; // fallback (your EAP225)
+    }
 
-          // 🟢 Updated: Use your controller’s LAN IP instead of 1.1.1.3
-          const controllerIP = "192.168.254.196";
-          const authURL = `http://${controllerIP}:8088/portal/auth?clientMac=${clientMac}&wlanuserip=${wlanuserip}&authType=external`;
+    try {
+      const response = await fetch(`${apiURL}?code=${encodeURIComponent(code)}`);
+      const data = await response.json();
 
-          // ✅ Try to unlock full network access
-          if (clientMac && wlanuserip) {
-            fetch(authURL, { method: "GET" })
-              .then(() => {
-                console.log("✅ Internet unlocked via controller.");
-                window.location.href = "home.html";
-              })
-              .catch((err) => {
-                console.error("⚠️ Auth request failed:", err);
-                alert("Authenticated but unable to unlock internet automatically. Please reconnect.");
-                window.location.href = "home.html";
-              });
-          } else {
-            console.warn("⚠️ Missing Omada parameters.");
-            window.location.href = "home.html";
-          }
+      if (data.valid) {
+        const params = new URLSearchParams(window.location.search);
+        const clientMac = params.get("clientMac");
+        const wlanuserip = params.get("wlanuserip");
+
+        if (clientMac && wlanuserip) {
+          const authURL = `http://${controllerIP}:8080/portal/auth?clientMac=${clientMac}&wlanuserip=${wlanuserip}`;
+          console.log("Authenticating via:", authURL);
+
+          fetch(authURL, { method: "GET" })
+            .then(() => window.location.href = "home.html")
+            .catch(() => {
+              alert("Authenticated but unable to unlock internet automatically. Please reconnect.");
+              window.location.href = "home.html";
+            });
         } else {
-          alert("Invalid or expired code.");
-          window.location.href = "index.html";
+          window.location.href = "home.html";
         }
-      } catch (err) {
-        console.error(err);
-        alert("Connection error. Please try again later.");
+      } else {
+        alert("Invalid or expired code.");
         window.location.href = "index.html";
       }
-    }, 2000);
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Connection error. Please try again later.");
+      window.location.href = "index.html";
+    }
   };
 
-  // Disable right click
+  // Disable right-click and dev tools
   document.addEventListener('contextmenu', event => event.preventDefault());
-
-  // Disable F12, Ctrl+Shift+I, Ctrl+U
   document.onkeydown = function(e) {
     if (e.key === "F12" || 
         (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
@@ -120,5 +118,6 @@
     }
   };
 </script>
+
 </body>
 </html>
