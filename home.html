@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Space Matters - Home</title>
   <style>
-    body {
+    /* Ensure full-height background and remove gaps */
+    html, body {
+      height: 100%;
       margin: 0;
       font-family: 'Raleway', sans-serif;
-      background: url('images/test2.webp') no-repeat center center;
-      background-size: cover;
-      background-attachment: scroll; /* Fix for mobile wobble */
       color: #fff;
       text-align: center;
+      background: url('images/test2.webp') no-repeat center center fixed;
+      background-size: cover;
     }
 
     .overlay {
@@ -26,8 +27,8 @@
     }
 
     h1 {
-      font-size: 28px;
-      margin-top: 30px;
+      font-size: 32px;
+      margin-top: 40px;
       color: white;
     }
 
@@ -38,6 +39,7 @@
       flex-wrap: wrap;
       gap: 30px;
       padding: 40px 20px;
+      min-height: calc(100vh - 200px); /* Ensures no gray space */
     }
 
     .card {
@@ -52,6 +54,11 @@
       align-items: center;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
       overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
     }
 
     .card button {
@@ -69,18 +76,37 @@
 
     .like-btn { background: #3b9eff; }
     .subscribe-btn { background: #ff3b3b; }
-    .follow-btn {
-      background: linear-gradient(to right, #ff69b4, #ffa500);
-    }
+    .follow-btn { background: linear-gradient(to right, #ff69b4, #ffa500); }
 
-    .like-btn:hover, .subscribe-btn:hover, .follow-btn:hover {
+    .card button:hover {
       transform: scale(1.05);
     }
 
     h2 {
       color: white;
-      margin-bottom: 20px;
+      margin-bottom: 40px;
       font-weight: 700;
+    }
+
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 24px;
+      }
+
+      .card {
+        width: 85%;
+        height: auto;
+        padding: 20px 0;
+      }
+
+      .card button {
+        font-size: 14px;
+      }
+
+      h2 {
+        font-size: 18px;
+      }
     }
   </style>
 </head>
@@ -104,42 +130,38 @@
   <h2>Follow us to get updated!</h2>
   
 <script>
-// Disable right click
-document.addEventListener('contextmenu', event => event.preventDefault());
+  // Disable right click
+  document.addEventListener('contextmenu', event => event.preventDefault());
 
-// Disable F12, Ctrl+Shift+I, Ctrl+U
-document.onkeydown = function(e) {
-  if (
-    e.key === "F12" ||
-    (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
-    (e.ctrlKey && e.key === "U")
-  ) {
-    e.preventDefault();
-    return false;
-  }
-};
-
-// --- Network access grant (Omada-compatible) ---
-window.addEventListener("load", async () => {
-  const portalUrl = localStorage.getItem("portalUrl");
-  const clientMac = localStorage.getItem("clientMac");
-  const wlanuserip = localStorage.getItem("wlanuserip");
-
-  // Only proceed if portal params exist
-  if (portalUrl && clientMac && wlanuserip) {
-    try {
-      // Construct redirect URL
-      const grantUrl = `${portalUrl}?clientMac=${clientMac}&wlanuserip=${wlanuserip}&success=true`;
-
-      // Redirect to Omada gateway to grant access
-      window.location.href = grantUrl;
-    } catch (err) {
-      console.error("Grant failed:", err);
+  // Disable F12, Ctrl+Shift+I, Ctrl+U
+  document.onkeydown = function(e) {
+    if (
+      e.key === "F12" ||
+      (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+      (e.ctrlKey && e.key === "U")
+    ) {
+      e.preventDefault();
+      return false;
     }
-  } else {
-    console.warn("No portal parameters found — possibly accessed directly.");
-  }
-});
+  };
+
+  // --- Network access grant (Omada-compatible) ---
+  window.addEventListener("load", async () => {
+    const portalUrl = localStorage.getItem("portalUrl");
+    const clientMac = localStorage.getItem("clientMac");
+    const wlanuserip = localStorage.getItem("wlanuserip");
+
+    if (portalUrl && clientMac && wlanuserip) {
+      try {
+        const grantUrl = `${portalUrl}?clientMac=${clientMac}&wlanuserip=${wlanuserip}&success=true`;
+        window.location.href = grantUrl;
+      } catch (err) {
+        console.error("Grant failed:", err);
+      }
+    } else {
+      console.warn("No portal parameters found — possibly accessed directly.");
+    }
+  });
 </script>
 
 </body>
