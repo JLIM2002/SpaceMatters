@@ -129,48 +129,70 @@
   </div>
 
 <script>
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6ZXpGhyrlXsEeWuFUwLrYyNOWGNW_7P4cENDsbwRt8-7u2YkxwqQySIfUoJRqatsV/exec; // ← your Apps Script URL
+
 function goToLoading() {
   const nickname = document.getElementById("nickname").value.trim();
   const code = document.getElementById("accessCode").value.trim();
 
-  if (nickname && code) {
-    // store user input for loading.html to verify later
-    localStorage.setItem("nickname", nickname);
-    localStorage.setItem("accessCode", code);
-
-    // store Omada parameters to pass to next pages
-    const params = new URLSearchParams(window.location.search);
-    const portalUrl = params.get("portalUrl");
-    const clientMac = params.get("clientMac");
-    const wlanuserip = params.get("wlanuserip");
-
-    if (portalUrl && clientMac && wlanuserip) {
-      localStorage.setItem("portalUrl", portalUrl);
-      localStorage.setItem("clientMac", clientMac);
-      localStorage.setItem("wlanuserip", wlanuserip);
-    }
-
-    // redirect to loading.html
-    window.location.href = "loading.html";
-  } else {
-    alert("Please enter both username and code.");
+  if (!nickname || !code) {
+    alert("Please enter both nickname and access code.");
+    return;
   }
+
+  const button = document.querySelector("button");
+  button.disabled = true;
+  button.innerText = "Verifying...";
+
+  fetch(`${GOOGLE_SCRIPT_URL}?code=${encodeURIComponent(code)}`)
+    .then(res => res.json())
+    .then(data => {
+      console.log("Verification result:", data);
+
+      if (data.valid) {
+        // Save to localStorage for loading.html
+        localStorage.setItem("nickname", nickname);
+        localStorage.setItem("accessCode", code);
+
+        // Capture Omada parameters from URL
+        const params = new URLSearchParams(window.location.search);
+        localStorage.setItem("portalUrl", params.get("portalUrl") || "");
+        localStorage.setItem("clientMac", params.get("clientMac") || "");
+        localStorage.setItem("wlanuserip", params.get("wlanuserip") || "");
+
+        // Redirect to loading.html
+        window.location.href = "loading.html";
+      } else {
+        if (data.reason === "No code provided") {
+          alert("Please enter an access code.");
+        } else if (data.error) {
+          alert("Server error: " + data.error);
+        } else {
+          alert("Invalid or expired code. Please try again.");
+        }
+      }
+
+      button.disabled = false;
+      button.innerText = "Connect";
+    })
+    .catch(err => {
+      console.error("Error verifying code:", err);
+      alert("Verification failed. Please check your connection.");
+      button.disabled = false;
+      button.innerText = "Connect";
+    });
 }
 
-// Allow Enter key to submit
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    goToLoading();
-  }
+// Allow Enter key
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter") goToLoading();
 });
 
-// Disable right click
-document.addEventListener('contextmenu', event => event.preventDefault());
-
-// Disable F12, Ctrl+Shift+I, Ctrl+U
+// Disable right-click and dev tools
+document.addEventListener('contextmenu', e => e.preventDefault());
 document.onkeydown = function(e) {
   if (
-    e.key === "F12" || 
+    e.key === "F12" ||
     (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
     (e.ctrlKey && e.key === "U")
   ) {
