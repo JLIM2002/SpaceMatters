@@ -33,17 +33,9 @@
       background-position: center;
     }
 
-    .bg1 {
-      background-image: url('images/test1.webp');
-    }
-
-    .bg2 {
-      background-image: url('images/test2.webp');
-    }
-
-    .bg3 {
-      background-image: url('images/test3.webp');
-    }
+    .bg1 { background-image: url('images/test1.webp'); }
+    .bg2 { background-image: url('images/test2.webp'); }
+    .bg3 { background-image: url('images/test3.webp'); }
 
     .overlay {
       position: absolute;
@@ -98,12 +90,8 @@
 
     /* ✅ Mobile: show only middle background */
     @media (max-width: 768px) {
-      .background {
-        display: block;
-      }
-      .bg-section {
-        display: none;
-      }
+      .background { display: block; }
+      .bg-section { display: none; }
       .bg2 {
         display: block;
         width: 100%;
@@ -125,82 +113,65 @@
     <h1>Space Matters</h1>
     <input type="text" id="nickname" placeholder="Enter nickname" required>
     <input type="text" id="accessCode" placeholder="Enter code" required>
-    <button onclick="goToLoading()">Connect</button>
+    <button onclick="verifyCode()">Connect</button>
   </div>
 
 <script>
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6ZXpGhyrlXsEeWuFUwLrYyNOWGNW_7P4cENDsbwRt8-7u2YkxwqQySIfUoJRqatsV/exec; // ← your Apps Script URL
+  // 🟢 Your Google Apps Script endpoint
+  const apiURL = "https://script.google.com/macros/s/AKfycbx6ZXpGhyrlXsEeWuFUwLrYyNOWGNW_7P4cENDsbwRt8-7u2YkxwqQySIfUoJRqatsV/exec";
 
-function goToLoading() {
-  const nickname = document.getElementById("nickname").value.trim();
-  const code = document.getElementById("accessCode").value.trim();
+  async function verifyCode() {
+    const nickname = document.getElementById("nickname").value.trim();
+    const code = document.getElementById("accessCode").value.trim();
 
-  if (!nickname || !code) {
-    alert("Please enter both nickname and access code.");
-    return;
-  }
+    if (!nickname || !code) {
+      alert("Please enter both nickname and code.");
+      return;
+    }
 
-  const button = document.querySelector("button");
-  button.disabled = true;
-  button.innerText = "Verifying...";
-
-  fetch(`${GOOGLE_SCRIPT_URL}?code=${encodeURIComponent(code)}`)
-    .then(res => res.json())
-    .then(data => {
-      console.log("Verification result:", data);
+    try {
+      // Check code validity via Google Sheet API
+      const response = await fetch(`${apiURL}?code=${encodeURIComponent(code)}`);
+      const data = await response.json();
 
       if (data.valid) {
-        // Save to localStorage for loading.html
+        // ✅ Save user info + Omada params for next page
         localStorage.setItem("nickname", nickname);
         localStorage.setItem("accessCode", code);
 
-        // Capture Omada parameters from URL
         const params = new URLSearchParams(window.location.search);
         localStorage.setItem("portalUrl", params.get("portalUrl") || "");
         localStorage.setItem("clientMac", params.get("clientMac") || "");
         localStorage.setItem("wlanuserip", params.get("wlanuserip") || "");
 
-        // Redirect to loading.html
+        // Proceed to loading page
         window.location.href = "loading.html";
       } else {
-        if (data.reason === "No code provided") {
-          alert("Please enter an access code.");
-        } else if (data.error) {
-          alert("Server error: " + data.error);
-        } else {
-          alert("Invalid or expired code. Please try again.");
-        }
+        alert("Invalid or expired access code.");
       }
-
-      button.disabled = false;
-      button.innerText = "Connect";
-    })
-    .catch(err => {
-      console.error("Error verifying code:", err);
-      alert("Verification failed. Please check your connection.");
-      button.disabled = false;
-      button.innerText = "Connect";
-    });
-}
-
-// Allow Enter key
-document.addEventListener("keydown", e => {
-  if (e.key === "Enter") goToLoading();
-});
-
-// Disable right-click and dev tools
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.onkeydown = function(e) {
-  if (
-    e.key === "F12" ||
-    (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
-    (e.ctrlKey && e.key === "U")
-  ) {
-    e.preventDefault();
-    return false;
+    } catch (err) {
+      console.error("Verification Error:", err);
+      alert("Cannot reach verification server. Please try again later.");
+    }
   }
-};
-</script>
 
+  // Allow Enter key to submit
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") verifyCode();
+  });
+
+  // Disable right click + dev tools
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  document.onkeydown = function(e) {
+    if (
+      e.key === "F12" ||
+      (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+      (e.ctrlKey && e.key === "U")
+    ) {
+      e.preventDefault();
+      return false;
+    }
+  };
+</script>
 </body>
 </html>
